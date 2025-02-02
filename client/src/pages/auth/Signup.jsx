@@ -1,10 +1,9 @@
 import React from 'react'
+import RegistrationForm from '../../components/auth/RegistrationForm'
 
 function Signup() {
   return (
-    <div>
-      signup page
-    </div>
+    <RegistrationForm />
   )
 }
 

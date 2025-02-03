@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Mail, Phone, Lock } from 'lucide-react';
 
-const RegistrationForm = () => {
+const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: '',
-    userName: '',
-    userType: 'user',
-    phone: '',
     password: ''
   });
 
@@ -35,16 +32,6 @@ const RegistrationForm = () => {
       tempErrors.email = 'Email is invalid';
     }
 
-    if (!formData.userName) {
-      tempErrors.userName = 'Username is required';
-    }
-
-    if (!formData.phone) {
-      tempErrors.phone = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(formData.phone)) {
-      tempErrors.phone = 'Invalid phone number format';
-    }
-
     if (!formData.password) {
       tempErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
@@ -56,7 +43,7 @@ const RegistrationForm = () => {
   };
 
   const handleSubmit = async (e) => {
-
+    
   };
 
   // Animation variants for form elements
@@ -90,11 +77,9 @@ const RegistrationForm = () => {
         className="sm:mx-auto sm:w-full sm:max-w-md"
       >
         <h2 className="text-center text-4xl font-extrabold text-gray-900 mb-2">
-          Create Account
+          Login
         </h2>
-        <p className="text-center text-gray-600 text-sm">
-          Join our billboard management platform
-        </p>
+        
       </motion.div>
 
       <motion.div
@@ -126,69 +111,6 @@ const RegistrationForm = () => {
                   />
                 </div>
                 {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <div className="relative">
-                <label htmlFor="userName" className="block text-sm font-medium text-gray-700">
-                  Username
-                </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    id="userName"
-                    name="userName"
-                    type="text"
-                    required
-                    className="pl-10 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    value={formData.userName}
-                    onChange={handleChange}
-                  />
-                </div>
-                {errors.userName && <p className="mt-2 text-sm text-red-600">{errors.userName}</p>}
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <label htmlFor="userType" className="block text-sm font-medium text-gray-700">
-                User Type
-              </label>
-              <select
-                id="userType"
-                name="userType"
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md transition-all"
-                value={formData.userType}
-                onChange={handleChange}
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-                <option value="admin">Vendor</option>
-              </select>
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <div className="relative">
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Phone className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    required
-                    className="pl-10 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    value={formData.phone}
-                    onChange={handleChange}
-                  />
-                </div>
-                {errors.phone && <p className="mt-2 text-sm text-red-600">{errors.phone}</p>}
               </div>
             </motion.div>
 
@@ -236,12 +158,13 @@ const RegistrationForm = () => {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 ) : (
-                  'Create Account'
+                  'Login'
                 )}
               </button>
             </motion.div>
+            
             <motion.div variants={itemVariants}>
-              <p className='text-center'>Have an account? <a href='/auth/signin' className='text-[#0095f6]'>Sign in</a></p>
+                <p className='text-center'>Don't have an account? <a href='/auth/signup' className='text-[#0095f6]'>Sign up</a></p>
             </motion.div>
           </form>
         </div>
@@ -250,4 +173,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default LoginForm;

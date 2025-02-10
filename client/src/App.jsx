@@ -5,6 +5,10 @@ import Dashboard from "./pages/Dashboard";
 import Signin from "./pages/auth/Signin";
 import Signup from "./pages/auth/Signup";
 import Users from "./pages/Users";
+import Profile from "./pages/Profile";
+import AccountSettings from "./pages/AccountSettings";
+import BillsAndPayment from "./pages/BillsAndPayment";
+
 
 function App() {
 
@@ -17,6 +21,11 @@ function App() {
               <Route path="/auth/signup" element={<Signup />} />
               
               <Route path="/" element={<Dashboard />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<AccountSettings />} />
+              <Route path="/payments" element={<BillsAndPayment />} />
+          
+              
               <Route path="/users" element={<Users />} />
             </Routes>
         </div>

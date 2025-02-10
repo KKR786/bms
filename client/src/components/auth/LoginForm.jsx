@@ -166,6 +166,9 @@ const LoginForm = () => {
             <motion.div variants={itemVariants}>
                 <p className='text-center'>Don't have an account? <a href='/auth/signup' className='text-[#0095f6]'>Sign up</a></p>
             </motion.div>
+            <motion.div variants={itemVariants}>
+                <p className='text-center'>Forgot Password? <a className='text-[#0095f6]'>   Reset Password</a></p>
+            </motion.div>
           </form>
         </div>
       </motion.div>

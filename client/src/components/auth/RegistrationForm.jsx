@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Eye, EyeOff, User, Mail, Phone, Lock, Camera } from 'lucide-react';
 import { Eye, EyeOff, User, Mail, Phone, Lock } from 'lucide-react';
 import { useSignup } from '../../hooks/useSignup'
 
@@ -10,9 +11,11 @@ const RegistrationForm = () => {
     userName: '',
     userType: 'user',
     phone: '',
-    password: ''
+    password: '',
+    photo: null
   });
 
+  const [photoPreview, setPhotoPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
@@ -25,6 +28,23 @@ const RegistrationForm = () => {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData(prevState => ({
+        ...prevState,
+        photo: file
+      }));
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -114,6 +134,31 @@ const RegistrationForm = () => {
       >
         <div className="bg-white py-8 px-4 shadow-lg sm:rounded-xl sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Photo Upload Section */}
+            <motion.div variants={itemVariants} className="flex flex-col items-center">
+              <div className="relative w-24 h-24 group">
+                <div className={`w-24 h-24 rounded-full border-2 border-gray-300 overflow-hidden flex items-center justify-center bg-gray-50 ${photoPreview ? 'border-blue-500' : ''}`}>
+                  {photoPreview ? (
+                    <img src={photoPreview} alt="Profile preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <Camera className="h-8 w-8 text-gray-400" />
+                  )}
+                </div>
+                <label htmlFor="photo" className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600 transition-colors">
+                  <Camera className="h-4 w-4 text-white" />
+                  <input
+                    type="file"
+                    id="photo"
+                    name="photo"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <span className="mt-2 text-sm text-gray-500">Add profile photo</span>
+            </motion.div>
+
             <motion.div variants={itemVariants}>
               <div className="relative">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -174,7 +219,7 @@ const RegistrationForm = () => {
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
-                <option value="admin">Vendor</option>
+                <option value="vendor">Vendor</option>
               </select>
             </motion.div>
 

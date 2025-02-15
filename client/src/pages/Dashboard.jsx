@@ -12,7 +12,6 @@ import {
   Bell,
   Mail,
   User,
-  X,
   MapPin,
   DollarSign,
   TrendingUp,
@@ -49,8 +48,6 @@ const Dashboard = () => {
     },
   ]);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const headings = [
     "ID",
@@ -61,175 +58,9 @@ const Dashboard = () => {
     "Actions",
   ];
 
-  const handleProfileClick = (e) => {
-    e.stopPropagation();
-    setIsProfileOpen(!isProfileOpen);
-  };
-
-  const handleClickOutside = () => {
-    if (isProfileOpen) {
-      setIsProfileOpen(false);
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-gray-100" onClick={handleClickOutside}>
-      {/* Hamburger Menu Button */}
-      <button
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="fixed top-4 left-4 z-50 p-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer"
-      >
-        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full bg-gray-800 text-white z-40 transform transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } w-64`}
-      >
-        <div className="p-4 flex items-center justify-between mt-14">
-          <h2 className="text-xl font-bold">Billboard CRM</h2>
-        </div>
-
-        <nav className="mt-8 ">
-          <ul className="space-y-2 px-3">
-            <li className="flex items-center space-x-3 bg-blue-600 text-white p-3 rounded-lg cursor-pointer">
-              <Home size={20} />
-              <span>Dashboard</span>
-            </li>
-            <Link
-              to="/allbillboards"
-              className="flex items-center space-x-3 hover:bg-gray-700 p-3 rounded-lg cursor-pointer"
-            >
-              <FileText size={20} />
-              <span>Billboards</span>
-            </Link>
-            <Link
-              to="/users"
-              className="flex items-center space-x-3 hover:bg-gray-700 p-3 rounded-lg cursor-pointer"
-            >
-              <Users size={20} />
-              <span>Users</span>
-            </Link>
-            <Link
-              to="/bookings"
-              className="flex items-center space-x-3 hover:bg-gray-700 p-3 rounded-lg cursor-pointer"
-            >
-              <Calendar size={20} />
-              <span>Bookings</span>
-            </Link>
-
-            <Link
-              to="/payments"
-              className="flex items-center space-x-3 hover:bg-gray-700 p-3 rounded-lg cursor-pointer"
-            >
-              <Calendar size={20} />
-              <span>Payments</span>
-            </Link>
-
-            <Link
-              to="/reports"
-              className="flex items-center space-x-3 hover:bg-gray-700 p-3 rounded-lg cursor-pointer"
-            >
-              <BarChart2 size={20} />
-              <span>Reports</span>
-            </Link>
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Main Content Wrapper */}
-      <div
-        className={`${
-          isSidebarOpen ? "ml-64" : "ml-0"
-        } transition-margin duration-300 ease-in-out`}
-      >
-        {/* Main Content */}
-        <div className="flex-1 ">
-          {/* Top Navigation */}
-          <header className="bg-white shadow-sm pl-20 ">
-            <div className="flex items-center justify-between px-6 py-4">
-              <div className="flex items-center space-x-3 cursor-pointer">
-                <h1 className="text-xl font-semibold">Dashboard</h1>
-                <div className="text-sm text-gray-500">
-                  <span>Home</span>
-                  <span className="mx-2">/</span>
-                  <span className="text-blue-600">Dashboard</span>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={() => navigate("/notifications")}
-                    className="p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
-                  >
-                    <Bell size={20} className="text-gray-600" />
-                  </button>
-                  <button
-                    onClick={() => navigate("/messages")}
-                    className="p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
-                  >
-                    <Mail size={20} className="text-gray-600" />
-                  </button>
-                  <button
-                    onClick={() => navigate("/settings")}
-                    className="p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
-                  >
-                    <Settings size={20} className="text-gray-600" />
-                  </button>
-                  <div className="relative cursor-pointer">
-                    <button
-                      onClick={handleProfileClick}
-                      className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-1"
-                    >
-                      <img
-                        src="/api/placeholder/40/40"
-                        alt="Profile"
-                        className="w-10 h-10 rounded-full cursor-pointer"
-                      />
-                      <div>
-                        <p className="text-sm font-medium cursor-pointer">
-                          John Doe
-                        </p>
-                        <p className="text-xs text-gray-500">Administrator</p>
-                      </div>
-                    </button>
-
-                    {/* Profile Dropdown */}
-                    {isProfileOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200">
-                        <a
-                          href="/profile"
-                          className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer"
-                        >
-                          <User size={16} />
-                          <span>My Profile</span>
-                        </a>
-                        <a
-                          href="/settings"
-                          className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
-                        >
-                          <Settings size={16} />
-                          <span>Settings</span>
-                        </a>
-
-                        <hr className="my-1 border-gray-200" />
-                        <button className="w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer">
-                          <LogOut size={16} />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          {/* Main Content Area */}
-          <main className="p-6">
+    <main className="p-6">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
               {/* Summary Cards content */}
@@ -667,9 +498,6 @@ const Dashboard = () => {
               </div>
             </div>
           </main>
-        </div>
-      </div>
-    </div>
   );
 };
 

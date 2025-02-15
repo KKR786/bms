@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Mail, Phone, Lock } from 'lucide-react';
+import { useLogin } from "../../hooks/useLogin";
 
 const LoginForm = () => {
+  const { login, error, isLoading } = useLogin();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -10,7 +12,6 @@ const LoginForm = () => {
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,7 +44,15 @@ const LoginForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    
+    e.preventDefault();
+
+    if(validateForm) {
+      try {
+        await login(formData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   // Animation variants for form elements

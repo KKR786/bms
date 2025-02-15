@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Mail, Phone, Lock, Camera } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Phone, Lock } from 'lucide-react';
+import { useSignup } from '../../hooks/useSignup'
 
 const RegistrationForm = () => {
+  const {signup, error, isLoading} = useSignup();
   const [formData, setFormData] = useState({
     email: '',
     userName: '',
@@ -15,7 +18,6 @@ const RegistrationForm = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +77,15 @@ const RegistrationForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    if(validateForm) {
+      try {
+        await signup(formData)
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   // Animation variants for form elements

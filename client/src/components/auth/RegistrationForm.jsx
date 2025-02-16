@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Mail, Phone, Lock, Camera } from 'lucide-react';
-import { Eye, EyeOff, User, Mail, Phone, Lock } from 'lucide-react';
 import { useSignup } from '../../hooks/useSignup'
 
 const RegistrationForm = () => {
-  const {signup, error, isLoading} = useSignup();
+  const { signup, error, isLoading } = useSignup();
+  const [photo, setPhoto] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
     userName: '',
@@ -21,13 +21,13 @@ const RegistrationForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -51,25 +51,25 @@ const RegistrationForm = () => {
   const validateForm = () => {
     let tempErrors = {};
     if (!formData.email) {
-      tempErrors.email = 'Email is required';
+      tempErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      tempErrors.email = 'Email is invalid';
+      tempErrors.email = "Email is invalid";
     }
 
     if (!formData.userName) {
-      tempErrors.userName = 'Username is required';
+      tempErrors.userName = "Username is required";
     }
 
     if (!formData.phone) {
-      tempErrors.phone = 'Phone number is required';
+      tempErrors.phone = "Phone number is required";
     } else if (!/^\d{10}$/.test(formData.phone)) {
-      tempErrors.phone = 'Invalid phone number format';
+      tempErrors.phone = "Invalid phone number format";
     }
 
     if (!formData.password) {
-      tempErrors.password = 'Password is required';
+      tempErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      tempErrors.password = 'Password must be at least 6 characters';
+      tempErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(tempErrors);
@@ -79,9 +79,21 @@ const RegistrationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(validateForm) {
+    if (validateForm()) {
       try {
-        await signup(formData)
+        const data = new FormData();
+
+        Object.entries(formData).forEach(([key, value]) => {
+          if (value) data.append(key, value);
+        });
+
+        data.append("photo", photo);
+
+        for (let pair of data.entries()) {
+          console.log(pair[0], pair[1]);
+        }
+
+        await signup(data);
       } catch (error) {
         console.log(error);
       }
@@ -96,9 +108,9 @@ const RegistrationForm = () => {
       y: 0,
       transition: {
         duration: 0.5,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -106,8 +118,8 @@ const RegistrationForm = () => {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.5 }
-    }
+      transition: { duration: 0.5 },
+    },
   };
 
   return (
@@ -161,7 +173,10 @@ const RegistrationForm = () => {
 
             <motion.div variants={itemVariants}>
               <div className="relative">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email address
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -179,13 +194,64 @@ const RegistrationForm = () => {
                     onChange={handleChange}
                   />
                 </div>
-                {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants}>
               <div className="relative">
-                <label htmlFor="userName" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="photo"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Profile Photo
+                </label>
+                <div className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm">
+                  <div className="flex items-center">
+                    <div className="h-24 w-24 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border-2 border-gray-300">
+                      {photo ? (
+                        <img
+                          src={URL.createObjectURL(photo)}
+                          alt="Profile preview"
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <User className="h-12 w-12 text-gray-400" />
+                      )}
+                    </div>
+                    <div className="ml-5">
+                      <input
+                        type="file"
+                        id="photo"
+                        name="photo"
+                        accept="image/*"
+                        onChange={(e) => setPhoto(e.target.files[0])}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="photo"
+                        className="cursor-pointer py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        {`${photo ? 'Change' : 'Upload'} photo`}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="mt-2 text-xs text-center text-gray-500">
+                  JPG, PNG or GIF (Max. 2MB)
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <div className="relative">
+                <label
+                  htmlFor="userName"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Username
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -202,12 +268,17 @@ const RegistrationForm = () => {
                     onChange={handleChange}
                   />
                 </div>
-                {errors.userName && <p className="mt-2 text-sm text-red-600">{errors.userName}</p>}
+                {errors.userName && (
+                  <p className="mt-2 text-sm text-red-600">{errors.userName}</p>
+                )}
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <label htmlFor="userType" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="userType"
+                className="block text-sm font-medium text-gray-700"
+              >
                 User Type
               </label>
               <select
@@ -225,7 +296,10 @@ const RegistrationForm = () => {
 
             <motion.div variants={itemVariants}>
               <div className="relative">
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Phone Number
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -242,13 +316,18 @@ const RegistrationForm = () => {
                     onChange={handleChange}
                   />
                 </div>
-                {errors.phone && <p className="mt-2 text-sm text-red-600">{errors.phone}</p>}
+                {errors.phone && (
+                  <p className="mt-2 text-sm text-red-600">{errors.phone}</p>
+                )}
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants}>
               <div className="relative">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Password
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -270,11 +349,17 @@ const RegistrationForm = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       className="text-gray-400 hover:text-gray-500 focus:outline-none"
                     >
-                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
                     </button>
                   </div>
                 </div>
-                {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
+                {errors.password && (
+                  <p className="mt-2 text-sm text-red-600">{errors.password}</p>
+                )}
               </div>
             </motion.div>
 
@@ -282,20 +367,41 @@ const RegistrationForm = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105"
+                className="w-full cursor-pointer flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105"
               >
                 {isLoading ? (
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                 ) : (
-                  'Create Account'
+                  "Create Account"
                 )}
               </button>
             </motion.div>
             <motion.div variants={itemVariants}>
-              <p className='text-center'>Have an account? <a href='/auth/signin' className='text-[#0095f6]'>Sign in</a></p>
+              <p className="text-center">
+                Have an account?{" "}
+                <a href="/auth/signin" className="text-[#0095f6]">
+                  Sign in
+                </a>
+              </p>
             </motion.div>
           </form>
         </div>

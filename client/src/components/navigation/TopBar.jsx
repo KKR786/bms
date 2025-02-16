@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Bell, Mail, Settings, User, HelpCircle, LogOut } from "lucide-react";
+import { useAuthContext } from "../../hooks/useAuth";
+import { useLogout } from "../../hooks/useLogout";
 
 const TopBar = ({ isOpen }) => {
+  const { user } = useAuthContext();
+  const { logout } = useLogout();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const handleProfileClick = (e) => {
@@ -41,19 +45,19 @@ const TopBar = ({ isOpen }) => {
               </button>
 
               {/* Profile Dropdown */}
-              <div className="relative cursor-pointer">
+              <div className="relative">
                 <button
                   onClick={handleProfileClick}
-                  className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-1"
+                  className="flex items-center cursor-pointer space-x-3 hover:bg-gray-100 rounded-lg p-2"
                 >
                   <img
-                    src="/api/placeholder/40/40"
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full cursor-pointer"
+                    src={`http://localhost:1111/${user.photo.replace(/\\/g, "/")}`}
+                    alt={user.name}
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                   <div>
-                    <p className="text-sm font-medium cursor-pointer">John Doe</p>
-                    <p className="text-xs text-gray-500">Administrator</p>
+                    <p className="text-sm font-medium">{user.name}</p>
+                    <p className="text-xs text-gray-500">{user.userType}</p>
                   </div>
                 </button>
 
@@ -72,7 +76,7 @@ const TopBar = ({ isOpen }) => {
                       <span>Help Center</span>
                     </button>
                     <hr className="my-1 border-gray-200" />
-                    <button className="w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer">
+                    <button className="w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer" onClick={() => logout()}>
                       <LogOut size={16} />
                       <span>Sign Out</span>
                     </button>

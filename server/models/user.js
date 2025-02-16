@@ -12,24 +12,38 @@ const userSchema = new Schema({
   },  
   email: {
     type: String,
-    required: true,
-    unique: true
+    unique: [true, 'Email already exists!'],
+    required: [true, 'Email is required!'],
   },
   userName: {
     type: String,
-    required: true
+    required: [true, 'Name is required!']
   },
   photo: {
     type: String,
   },
+  address: {
+    place: {
+        type: String,
+    },
+    coordinates: {
+        type: [Number],
+        index: '2dsphere',
+    },
+  },
   userType: {
     type: String,
     enum: ["admin", "vendor", "user"],
+    description: "Must be either Admin, Vendor or User",
     required: true
+  },
+  phoneNumber: {
+    type: String,
+    match: [/^\d{10}$/, 'Please enter a valid phone number'],
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'Password is required!'],
   }
 }, { timestamps: true });
 
@@ -72,30 +86,29 @@ userSchema.pre('save', async function (next) {
 });
 
 // Signup
-userSchema.statics.signup = async function(email, userName, userType, password) {
+userSchema.statics.signup = async function(data) {
 
   // validation
-  if (!email || !userName || !userType || !password) {
-    console.log(email, userName, userType, password);
+  if (!data.email || !data.userName || !data.userType || !data.password) {
     throw Error('All fields must be filled')
   }
-  if (!validator.isEmail(email)) {
+  if (!validator.isEmail(data.email)) {
     throw Error('Email not valid')
   }
-  if (!validator.isStrongPassword(password)) {
+  if (!validator.isStrongPassword(data.password)) {
     throw Error('Password not strong enough')
   }
 
-  const exists = await this.findOne({ email })
+  const exists = await this.findOne({ email: data.email })
 
   if (exists) {
     throw Error('Email already in use')
   }
 
   const salt = await bcrypt.genSalt(10)
-  const hash = await bcrypt.hash(password, salt)
+  const hash = await bcrypt.hash(data.password, salt)
 
-  const user = await this.create({ email, userName, userType, password: hash })
+  const user = await this.create({ ...data, password: hash })
 
   return user
 }

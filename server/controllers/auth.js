@@ -33,8 +33,10 @@ const loginUser = async (req, res) => {
 
     // create a token
     const token = createToken(user._id)
-    const name = user.name
-    const role = user.role
+    const name = user.userName
+    const userType = user.userType
+    const phone = user.phoneNumber
+    const photo = user.photo
     const id = user._id
     const joined = new Date(user.createdAt.toString());
     const joiningDate = joined.getFullYear() +
@@ -43,7 +45,7 @@ const loginUser = async (req, res) => {
     "-" +
     joined.toLocaleString("en-US", { day: "2-digit" });
     
-    res.status(200).json({email, token, name, role, id, joiningDate})
+    res.status(200).json({email, token, name, photo, phone, userType, id, joiningDate})
   } catch (error) {
     res.status(400).json({error: error.message})
   }
@@ -51,15 +53,27 @@ const loginUser = async (req, res) => {
 
 // signup a user
 const signupUser = async (req, res) => {
-  const {email, userName, userType, password} = req.body
+  const photo = req.file ? req.file.path : null;
+  const {email, userName, userType, phone, password} = req.body
 
+  const data = {
+    email,
+    userName,
+    photo,
+    userType,
+    phoneNumber: phone || '',
+    password
+  };
+  console.log(data);
   try {
-    const user = await User.signup(email, userName, userType, password)
+    const user = await User.signup(data)
+
+    const id = user._id;
 
     // create a token
     const token = createToken(user._id)
 
-    res.status(200).json({email, token, userName, userType})
+    res.status(200).json({id, email, token, userName, userType, phone, photo})
   } catch (error) {
     res.status(400).json({error: error.message})
   }

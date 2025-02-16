@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
+import { useAuthContext } from '../hooks/useAuth';
 import {
   User,
   Mail,
   Phone,
   MapPin,
-  Lock,
-  Bell,
-  CreditCard,
-  Activity,
   Camera,
-  Shield,
   Building,
-  Globe,
   AlertTriangle,
-  DollarSign,
-  BarChart2,
-  Heart,
-  Clock,
-  ChevronRight
+  BarChart2
 } from 'lucide-react';
 
 // Custom Card components to replace shadcn/ui
@@ -57,16 +48,7 @@ const TabsTrigger = ({ value, activeTab, onClick, children, className = '' }) =>
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('personal');
-  const [userRole] = useState('billboard-owner');
-  const [userData] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '+1 234 567 8900',
-    address: '123 Business Street, NY',
-    company: 'Billboard Co.',
-    registrationNumber: 'BRN123456',
-    website: 'www.example.com'
-  });
+  const { user } = useAuthContext();
 
 
   const renderPersonalSection = () => (
@@ -75,8 +57,8 @@ const ProfilePage = () => {
       <div className="relative">
         <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto overflow-hidden">
           <img
-            src="/api/placeholder/128/128"
-            alt="Profile"
+            src={`http://localhost:1111/${user.photo.replace(/\\/g, "/")}`}
+            alt={user.name}
             className="w-full h-full object-cover"
           />
           <button className="absolute bottom-0 right-0 bg-blue-600 p-2 rounded-full text-white hover:bg-blue-700">
@@ -93,8 +75,8 @@ const ProfilePage = () => {
             <User size={18} className="text-gray-400 mr-2" />
             <input
               type="text"
-              value={userData.name}
-              className="flex-1 outline-none"
+              value={user.name}
+              className="flex-1 outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Full Name"
             />
           </div>
@@ -106,8 +88,8 @@ const ProfilePage = () => {
             <Mail size={18} className="text-gray-400 mr-2" />
             <input
               type="email"
-              value={userData.email}
-              className="flex-1 outline-none"
+              value={user.email}
+              className="flex-1 outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Email Address"
             />
           </div>
@@ -119,8 +101,8 @@ const ProfilePage = () => {
             <Phone size={18} className="text-gray-400 mr-2" />
             <input
               type="tel"
-              value={userData.phone}
-              className="flex-1 outline-none"
+              value={user.phone}
+              className="flex-1 outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Phone Number"
             />
           </div>
@@ -132,8 +114,8 @@ const ProfilePage = () => {
             <MapPin size={18} className="text-gray-400 mr-2" />
             <input
               type="text"
-              value={userData.address}
-              className="flex-1 outline-none"
+              value={user.address}
+              className="flex-1 outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Address"
             />
           </div>
@@ -273,9 +255,11 @@ const ProfilePage = () => {
           </TabsTrigger>
          
           
-          <TabsTrigger value="business" activeTab={activeTab} onClick={setActiveTab}>
-            Business Profile
-          </TabsTrigger>
+          {user.role === 'vendor' &&
+            <TabsTrigger value="business" activeTab={activeTab} onClick={setActiveTab}>
+              Business Profile
+            </TabsTrigger>
+          }
         
           <TabsTrigger value="delete" activeTab={activeTab} onClick={setActiveTab}>
             Delete Account

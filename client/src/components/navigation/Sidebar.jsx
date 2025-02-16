@@ -4,12 +4,9 @@ import { Link } from "react-router-dom";
 const Sidebar = ({ isSidebarOpen }) => {
   return (
     <aside
-      className={`fixed top-0 left-0 h-screen w-64 bg-gray-800 text-white z-40 
-        transition-[transform,visibility] duration-300 ease-in-out
-        ${isSidebarOpen 
-          ? 'translate-x-0 visible' 
-          : '-translate-x-full invisible'
-        }`}
+      className={`fixed top-0 left-0 h-full bg-gray-800 text-white z-40 transform transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } w-64`}
     >
       <div className="p-4 flex items-center justify-between mt-14">
         <h2 className="text-xl font-bold">Billboard CRM</h2>
@@ -17,14 +14,8 @@ const Sidebar = ({ isSidebarOpen }) => {
 
       <nav className="mt-8">
         <ul className="space-y-2 px-3">
-          <li className="hover:bg-gray-700 rounded-lg cursor-pointer transition-colors duration-200">
-            <div className="flex items-center space-x-3 bg-blue-600 text-white p-3 rounded-lg">
-              <Home size={20} />
-              <span>Dashboard</span>
-            </div>
-          </li>
-          
           {[
+            { to: "/", icon: <Home size={20} />, text: "Dashboard" },
             { to: "/allbillboards", icon: <FileText size={20} />, text: "Billboards" },
             { to: "/users", icon: <Users size={20} />, text: "Users" },
             { to: "/bookings", icon: <Calendar size={20} />, text: "Bookings" },

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Mail, Phone, Lock, Camera } from 'lucide-react';
 import { useSignup } from '../../hooks/useSignup'
+import Error from '../../ui/toast/Error'
 
 const RegistrationForm = () => {
   const { signup, error, isLoading } = useSignup();
@@ -15,6 +16,7 @@ const RegistrationForm = () => {
     photo: null
   });
 
+  const [serverError, setServerError] = useState(null)
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
@@ -71,15 +73,15 @@ const RegistrationForm = () => {
 
         data.append("photo", photo);
 
-        for (let pair of data.entries()) {
-          console.log(pair[0], pair[1]);
-        }
-
         await signup(data);
+        if(error) setServerError(error);
       } catch (error) {
         console.log(error);
       }
     }
+    setTimeout(() => {
+      setServerError(null);
+    }, 7000);
   };
 
   // Animation variants for form elements
@@ -341,6 +343,7 @@ const RegistrationForm = () => {
           </form>
         </div>
       </motion.div>
+      {serverError && <Error message={String(serverError)} />}
     </div>
   );
 };

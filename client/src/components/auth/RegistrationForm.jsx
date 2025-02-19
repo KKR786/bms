@@ -15,7 +15,6 @@ const RegistrationForm = () => {
     photo: null
   });
 
-  const [photoPreview, setPhotoPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
@@ -28,23 +27,6 @@ const RegistrationForm = () => {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData(prevState => ({
-        ...prevState,
-        photo: file
-      }));
-      
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -62,7 +44,7 @@ const RegistrationForm = () => {
 
     if (!formData.phone) {
       tempErrors.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(formData.phone)) {
+    } else if (!/^\d{11}$/.test(formData.phone)) {
       tempErrors.phone = "Invalid phone number format";
     }
 
@@ -146,24 +128,23 @@ const RegistrationForm = () => {
       >
         <div className="bg-white py-8 px-4 shadow-lg sm:rounded-xl sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Photo Upload Section */}
             <motion.div variants={itemVariants} className="flex flex-col items-center">
               <div className="relative w-24 h-24 group">
-                <div className={`w-24 h-24 rounded-full border-2 border-gray-300 overflow-hidden flex items-center justify-center bg-gray-50 ${photoPreview ? 'border-blue-500' : ''}`}>
-                  {photoPreview ? (
-                    <img src={photoPreview} alt="Profile preview" className="w-full h-full object-cover" />
+                <div className={`w-24 h-24 rounded-full border-2 border-gray-300 overflow-hidden flex items-center justify-center bg-gray-50 ${photo ? 'border-blue-500' : ''}`}>
+                  {photo ? (
+                    <img src={URL.createObjectURL(photo)} alt="Profile preview" className="w-full h-full object-cover" />
                   ) : (
-                    <Camera className="h-8 w-8 text-gray-400" />
+                    <User className="h-12 w-12 text-gray-400" />
                   )}
                 </div>
-                <label htmlFor="photo" className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600 transition-colors">
+                <label htmlFor="photo" className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600 transition-colors" title={`${photo ? 'Change' : 'Upload'} photo`}>
                   <Camera className="h-4 w-4 text-white" />
                   <input
                     type="file"
                     id="photo"
                     name="photo"
                     accept="image/*"
-                    onChange={handlePhotoChange}
+                    onChange={(e) => setPhoto(e.target.files[0])}
                     className="hidden"
                   />
                 </label>
@@ -197,52 +178,6 @@ const RegistrationForm = () => {
                 {errors.email && (
                   <p className="mt-2 text-sm text-red-600">{errors.email}</p>
                 )}
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <div className="relative">
-                <label
-                  htmlFor="photo"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Profile Photo
-                </label>
-                <div className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm">
-                  <div className="flex items-center">
-                    <div className="h-24 w-24 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border-2 border-gray-300">
-                      {photo ? (
-                        <img
-                          src={URL.createObjectURL(photo)}
-                          alt="Profile preview"
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <User className="h-12 w-12 text-gray-400" />
-                      )}
-                    </div>
-                    <div className="ml-5">
-                      <input
-                        type="file"
-                        id="photo"
-                        name="photo"
-                        accept="image/*"
-                        onChange={(e) => setPhoto(e.target.files[0])}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="photo"
-                        className="cursor-pointer py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      >
-                        {`${photo ? 'Change' : 'Upload'} photo`}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="mt-2 text-xs text-center text-gray-500">
-                  JPG, PNG or GIF (Max. 2MB)
-                </p>
               </div>
             </motion.div>
 

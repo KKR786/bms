@@ -1,36 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '../ui/Table';
+import { useAuthContext } from '../hooks/useAuth';
+import Image from '../ui/Image';
 
 const Users = () => {
+  const { user, dispatch } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [users, setUsers] = useState([
-    {
-      id: 'U001',
-      email: 'john@example.com',
-      userName: 'johndoe',
-      userType: 'Admin',
-      phone: '1234567890',
-      password: 'password123'
-    },
-    {
-      id: 'U002',
-      email: 'jane@example.com',
-      userName: 'janesmith',
-      userType: 'User',
-      phone: '0987654321',
-      password: 'password456'
-    },
-    {
-      id: 'U003',
-      email: 'bob@example.com',
-      userName: 'bobwilson',
-      userType: 'User',
-      phone: '1112223333',
-      password: 'password789'
-    }
-  ]);
+  const [users, setUsers] = useState([]);
 
   const [newUser, setNewUser] = useState({
     email: '',
@@ -39,6 +17,28 @@ const Users = () => {
     phone: '',
     password: ''
   });
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+    const response = await fetch('/api/protected/users', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
+        }
+    })
+    const json = await response.json()
+
+    if (!response.ok) {
+     throw new Error("");
+    }
+    if (response.ok) {
+      setUsers(json);
+      dispatch({type: 'GET_USERS', payload: json})
+    }
+  }
+  fetchUsers();
+  },[user])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -84,19 +84,10 @@ const Users = () => {
     setSelectedUser(null);
   };
 
-  const headings = ["ID", "Email", "UserName", "UserType", "Phone", "Password", "Actions"];
+  const headings = ["ID", "Photo", "Email", "UserName", "UserType", "Phone", "Actions"];
 
   return (
-    <div className="px-5 relative">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">User List</h2>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Add New User
-        </button>
-      </div>
+    <div className="px-5 py-6 relative">
 
       {/* Add User Modal */}
       <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${isModalOpen ? 'translate-x-0' : 'translate-x-full'}`}>
@@ -316,15 +307,30 @@ const Users = () => {
         </div>
       </div>
 
-      <Table headings={headings}>
+      <Table title="User List" headings={headings}
+       button={
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Add New User
+        </button>
+       }
+      >
         {users.map((user) => (
           <tr key={user.id} className="hover:bg-gray-50">
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.id}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user._id}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <Image
+                src={user?.photo}
+                alt={user.name}
+                className="w-12 h-12 object-cover"
+              />
+            </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userName}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userType}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.phone}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.password}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.phoneNumber}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               <button 
                 className="text-blue-600 hover:text-blue-800 mr-3"

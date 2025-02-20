@@ -6,9 +6,9 @@ function Table({ title, button, headings, children }) {
     <div className="p-6 border-b border-gray-100">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">{title}</h3>
-        <button className="px-4 py-2 cursor-pointer bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <div>
           {button}
-        </button>
+        </div>
       </div>
     </div>
     <div className="overflow-x-auto">

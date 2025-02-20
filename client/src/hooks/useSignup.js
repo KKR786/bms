@@ -32,6 +32,9 @@ export const useSignup = () => {
       // update loading state
       setIsLoading(false)
     }
+    setTimeout(() => {
+      setError(null);
+    }, 7000);
   }
 
   return { signup, isLoading, error }

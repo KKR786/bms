@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Bell, Mail, Settings, User, HelpCircle, LogOut } from "lucide-react";
 import { useAuthContext } from "../../hooks/useAuth";
 import { useLogout } from "../../hooks/useLogout";
+import Image from "../../ui/Image";
 
 const TopBar = ({ isOpen }) => {
   const { user } = useAuthContext();
@@ -50,8 +51,8 @@ const TopBar = ({ isOpen }) => {
                   onClick={handleProfileClick}
                   className="flex items-center cursor-pointer space-x-3 hover:bg-gray-100 rounded-lg p-2"
                 >
-                  <img
-                    src={`http://localhost:1111/${user.photo.replace(/\\/g, "/")}`}
+                  <Image
+                    src={user.photo}
                     alt={user.name}
                     className="w-10 h-10 rounded-full object-cover"
                   />
@@ -62,7 +63,7 @@ const TopBar = ({ isOpen }) => {
                 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-[99999] border border-gray-200">
                     <a href="/profile" className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer">
                       <User size={16} />
                       <span>My Profile</span>

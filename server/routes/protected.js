@@ -15,6 +15,6 @@ router.post('/role/create', access.checkPermission('create_record'), newRole)
 router.delete('/role/:id', access.checkPermission('delete_record'), deleteRole)
 router.get('/role/all', access.checkPermission('read_record'), getRoleList)
 
-router.get('/users', access.checkPermission('create_record'), getUsers)
+router.get('/users', getUsers)
 
 module.exports = router

@@ -10,6 +10,7 @@ import {
   AlertTriangle,
   BarChart2
 } from 'lucide-react';
+import Image from '../ui/Image';
 
 // Custom Card components to replace shadcn/ui
 const Card = ({ children, className = '' }) => (
@@ -56,8 +57,8 @@ const ProfilePage = () => {
       {/* Profile Picture */}
       <div className="relative">
         <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto overflow-hidden">
-          <img
-            src={`http://localhost:1111/${user.photo.replace(/\\/g, "/")}`}
+          <Image
+            src={user.photo}
             alt={user.name}
             className="w-full h-full object-cover"
           />

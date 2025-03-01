@@ -16,7 +16,6 @@ const RegistrationForm = () => {
     photo: null
   });
 
-  const [serverError, setServerError] = useState(null)
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
@@ -74,14 +73,10 @@ const RegistrationForm = () => {
         data.append("photo", photo);
 
         await signup(data);
-        if(error) setServerError(error);
       } catch (error) {
         console.log(error);
       }
     }
-    setTimeout(() => {
-      setServerError(null);
-    }, 7000);
   };
 
   // Animation variants for form elements
@@ -343,7 +338,7 @@ const RegistrationForm = () => {
           </form>
         </div>
       </motion.div>
-      {serverError && <Error message={String(serverError)} />}
+      {error && <Error message={String(error)} />}
     </div>
   );
 };

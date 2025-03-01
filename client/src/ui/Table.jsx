@@ -30,4 +30,3 @@ function Table({ title, button, headings, children }) {
 }
 
 export default Table
-

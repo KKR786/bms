@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from '../ui/Table';
+import { X } from 'lucide-react'
 import { useAuthContext } from '../hooks/useAuth';
 import Image from '../ui/Image';
 
@@ -87,18 +88,18 @@ const Users = () => {
   const headings = ["ID", "Photo", "Email", "UserName", "UserType", "Phone", "Actions"];
 
   return (
-    <div className="px-5 py-6 relative">
+    <div className="px-5 py-6">
 
-      {/* Add User Modal */}
+      {/* Add User Modal */} 
       <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${isModalOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="h-full flex flex-col">
           <div className="flex justify-between items-center p-6 border-b">
             <h3 className="text-xl font-bold">Add New User</h3>
             <button
               onClick={() => setIsModalOpen(false)}
-              className="text-gray-500 hover:text-gray-700 text-2xl"
+              className="text-gray-500 cursor-pointer hover:text-gray-700 text-2xl"
             >
-              ×
+              <X size={24} />
             </button>
           </div>
 

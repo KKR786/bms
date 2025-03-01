@@ -131,19 +131,7 @@ const AddBillboard = () => {
               Basic Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Billboard ID
-                </label>
-                <input
-                  type="text"
-                  name="billboardId"
-                  value={formData.billboardId}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
+          
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Title/Name
@@ -193,19 +181,7 @@ const AddBillboard = () => {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  State
-                </label>
-                <input
-                  type="text"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
+              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   ZIP Code
@@ -221,30 +197,18 @@ const AddBillboard = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Latitude
+                  Country
                 </label>
                 <input
                   type="text"
-                  name="latitude"
-                  value={formData.latitude}
+                  name="country"
+                  value={formData.country}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Longitude
-                </label>
-                <input
-                  type="text"
-                  name="longitude"
-                  value={formData.longitude}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
+            
             </div>
           </div>
 
@@ -323,37 +287,21 @@ const AddBillboard = () => {
                   <option value="west">West</option>
                 </select>
               </div>
-              <div className="flex space-x-6">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="illuminated"
-                    checked={formData.illuminated}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">Illuminated</span>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Billboard Type
                 </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="digital"
-                    checked={formData.digital}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">Digital Display</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="Static"
-                    checked={formData.static}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">Static</span>
-                </label>
+                <select
+                  name="type"
+                  value={formData.type}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                >
+                  <option value="north">Digital</option>
+                  <option value="south">Illuminated</option>
+                  <option value="east">static</option>
+                  
+                </select>
               </div>
             </div>
           </div>
